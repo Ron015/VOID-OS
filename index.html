@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover, shrink-to-fit=no">
+	<title>VOID · Ron</title>
+	<link rel="icon" type="image/png" href="icons/icon128.png">
+	<!-- Font Awesome 6 (Free) -->
+	<link rel="stylesheet" href="icons/css/all.min.css">
+	<style>
+	/* RESET & BASE - Zero lag Android optimized */
+	*,
+	*::before,
+	*::after {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	:root {
+		--bg-primary: #000000;
+		--bg-secondary: #0a0a0a;
+		--accent-primary: #00d4ff;
+		--accent-secondary: #7b2ff7;
+		--accent-tertiary: #ff006e;
+		--text-primary: #ffffff;
+		--text-secondary: #aaaaaa;
+		--card-bg: #111111;
+		--border-glow: #00d4ff33;
+		--success: #00ff88;
+		--warning: #ffaa00;
+		--bg-gradient-1: #0a0e27;
+		--bg-gradient-2: #1a0b2e;
+		--bg-gradient-3: #0d1117;
+		--bg-image-url: none;
+		--bg-opacity: 0.3;
+		--icon-color-1: #00d4ff;
+		--icon-color-2: #7b2ff7;
+		--icon-color-3: #ff006e;
+		--icon-color-4: #51cf66;
+		--icon-color-5: #ffd43b;
+		--icon-color-6: #ff6b6b;
+		--icon-color-7: #cc5de8;
+		--icon-color-8: #4dabf7;
+	}
+
+	body {
+		min-height: 100vh;
+		background: var(--bg-primary);
+		display: flex;
+		align-items: flex-start;
+		justify-content: center;
+		font-family: 'Roboto', 'Segoe UI', -apple-system, sans-serif;
+		padding: 0;
+		margin: 0;
+		-webkit-tap-highlight-color: transparent;
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		user-select: none;
+		overscroll-behavior: none;
+		position: relative;
+	}
+
+	/* Background Layer System */
+	.bg-layer {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 0;
+		pointer-events: none;
+	}
+
+	.bg-gradient {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(135deg,
+				var(--bg-gradient-1) 0%,
+				var(--bg-gradient-2) 50%,
+				var(--bg-gradient-3) 100%);
+		opacity: 1;
+		transition: opacity 0.3s;
+	}
+
+	.bg-image {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-image: var(--bg-image-url);
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		opacity: var(--bg-opacity);
+		transition: opacity 0.3s;
+		display: none;
+	}
+
+	.bg-image.active {
+		display: block;
+	}
+
+	.bg-mesh {
+		position: absolute;
+		top: -50%;
+		left: -50%;
+		width: 200%;
+		height: 200%;
+		background:
+			radial-gradient(circle at 30% 40%, var(--accent-primary)22 0%, transparent 40%),
+			radial-gradient(circle at 70% 60%, var(--accent-secondary)22 0%, transparent 45%),
+			radial-gradient(circle at 50% 50%, var(--accent-tertiary)11 0%, transparent 50%);
+		opacity: 0.25;
+		animation: meshRotate 60s linear infinite;
+		pointer-events: none;
+		will-change: transform;
+		transform: translateZ(0);
+		mix-blend-mode: overlay;
+	}
+
+	@keyframes meshRotate {
+		0% {
+			transform: rotate(0deg) scale(1);
+		}
+
+		100% {
+			transform: rotate(360deg) scale(1.2);
+		}
+	}
+
+	/* Main container */
+	.android-home {
+		width: 100%;
+		max-width: 100%;
+		min-height: 100vh;
+		position: relative;
+		z-index: 2;
+		overflow-x: hidden;
+		padding: 16px 12px 20px;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.content {
+		position: relative;
+		z-index: 1;
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+	}
+
+	/* Header */
+	.header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 12px;
+		padding: 4px 4px;
+	}
+
+	.greeting {
+		color: var(--text-secondary);
+		font-size: 13px;
+		font-weight: 400;
+		letter-spacing: 0.5px;
+		text-transform: uppercase;
+		opacity: 0.8;
+	}
+
+	.header-actions {
+		display: flex;
+		gap: 8px;
+	}
+
+	.icon-btn {
+		width: 38px;
+		height: 38px;
+		border-radius: 38px;
+		background: var(--card-bg);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--accent-primary);
+		font-size: 18px;
+		cursor: pointer;
+		border: 1px solid var(--border-glow);
+		box-shadow: 0 2px 8px #00000080;
+		transition: all 0.1s;
+	}
+
+	.icon-btn:active {
+		transform: scale(0.92);
+		background: #1a1a1a;
+	}
+
+	/* Love Coding Badge */
+	.love-badge {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		margin: 4px 0 12px;
+		padding: 6px 16px;
+		background: linear-gradient(90deg, var(--accent-primary)22, var(--accent-secondary)22);
+		border-radius: 40px;
+		border: 1px solid var(--accent-primary)66;
+		align-self: center;
+	}
+
+	.love-badge span {
+		color: var(--text-primary);
+		font-size: 13px;
+		font-weight: 500;
+		letter-spacing: 0.5px;
+		text-shadow: 0 2px 4px #000000;
+	}
+
+	.heart {
+		color: #ff3366;
+		font-size: 16px;
+		animation: heartbeat 1.5s ease-in-out infinite;
+	}
+
+	@keyframes heartbeat {
+
+		0%,
+		100% {
+			transform: scale(1);
+		}
+
+		50% {
+			transform: scale(1.15);
+		}
+	}
+
+	/* Clock */
+	.clock-widget {
+		text-align: center;
+		margin: 8px 0 16px;
+	}
+
+	#timeDisplay {
+		font-size: 58px;
+		font-weight: 300;
+		color: var(--text-primary);
+		letter-spacing: 2px;
+		line-height: 1;
+		text-shadow: 0 0 30px var(--accent-primary);
+		font-feature-settings: "tnum";
+	}
+
+	#dateDisplay {
+		font-size: 14px;
+		color: var(--text-secondary);
+		margin-top: 4px;
+		font-weight: 400;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+	}
+
+	/* Search */
+	.search-section {
+		margin: 12px 0 18px;
+	}
+
+	.search-box {
+		display: flex;
+		align-items: center;
+		background: var(--card-bg);
+		border-radius: 60px;
+		padding: 4px 4px 4px 18px;
+		border: 1.5px solid var(--border-glow);
+		box-shadow: 0 4px 16px #000000, 0 0 0 1px var(--accent-primary)22 inset;
+	}
+
+	.search-box:focus-within {
+		border-color: var(--accent-primary);
+		box-shadow: 0 4px 20px #000000, 0 0 20px var(--accent-primary)66;
+	}
+
+	.search-icon {
+		color: var(--accent-primary);
+		margin-right: 10px;
+		font-size: 16px;
+	}
+
+	#searchInput {
+		flex: 1;
+		background: transparent;
+		border: none;
+		outline: none;
+		padding: 14px 6px 14px 0;
+		color: var(--text-primary);
+		font-size: 15px;
+		caret-color: var(--accent-primary);
+		-webkit-appearance: none;
+	}
+
+	#searchInput::placeholder {
+		color: var(--text-secondary);
+		opacity: 0.6;
+	}
+
+	.search-btn {
+		background: var(--accent-primary);
+		border: none;
+		border-radius: 50px;
+		padding: 11px 20px;
+		color: #000000;
+		font-weight: 700;
+		font-size: 13px;
+		letter-spacing: 0.5px;
+		cursor: pointer;
+		box-shadow: 0 4px 12px #000000, 0 0 20px var(--accent-primary);
+		transition: 0.1s;
+		border: 1px solid #ffffff40;
+		text-transform: uppercase;
+	}
+
+	.search-btn:active {
+		transform: scale(0.94);
+		background: #00b8e0;
+	}
+
+	/* Dials */
+	.dials-title {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin: 8px 4px 10px;
+	}
+
+	.dials-title span {
+		color: var(--text-secondary);
+		font-size: 12px;
+		font-weight: 500;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+	}
+
+	.edit-indicator {
+		color: var(--success);
+		font-size: 11px;
+	}
+
+	.dials-grid {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 8px;
+		margin-bottom: 12px;
+	}
+
+	.dial-card {
+		background: var(--card-bg);
+		border-radius: 18px;
+		padding: 12px 4px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		border: 1px solid var(--border-glow);
+		box-shadow: 0 4px 12px #00000080;
+		transition: all 0.1s;
+		cursor: pointer;
+		position: relative;
+		text-decoration: none;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	.dial-card:active {
+		transform: scale(0.94);
+		background: #1a1a1a;
+		border-color: var(--accent-primary);
+	}
+
+	.dial-icon {
+		font-size: 26px;
+		line-height: 1;
+		margin-bottom: 5px;
+		filter: drop-shadow(0 4px 6px #000000);
+	}
+
+	.dial-icon i {
+		font-size: 24px;
+	}
+
+	/* Colored Font Awesome icons */
+	.dial-icon .fa-icon-colored {
+		display: inline-block;
+	}
+
+	.dial-label {
+		font-size: 10px;
+		font-weight: 500;
+		color: var(--text-secondary);
+		text-transform: uppercase;
+		letter-spacing: 0.3px;
+		text-align: center;
+		max-width: 60px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.edit-mode .dial-card {
+		border: 2px dashed var(--accent-secondary) !important;
+		animation: pulse 2s infinite;
+	}
+
+	@keyframes pulse {
+
+		0%,
+		100% {
+			border-color: var(--accent-secondary);
+		}
+
+		50% {
+			border-color: var(--accent-primary);
+		}
+	}
+
+	.delete-badge {
+		position: absolute;
+		top: -5px;
+		right: -5px;
+		width: 22px;
+		height: 22px;
+		background: #ff3333;
+		border-radius: 22px;
+		display: none;
+		align-items: center;
+		justify-content: center;
+		color: white;
+		font-size: 12px;
+		font-weight: bold;
+		box-shadow: 0 2px 8px #000000;
+		border: 1px solid #ff8888;
+	}
+
+	.edit-mode .delete-badge {
+		display: flex;
+	}
+
+	.add-dial {
+		background: transparent;
+		border: 2px dashed var(--accent-secondary);
+		border-radius: 18px;
+		padding: 12px 4px;
+		display: none;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		color: var(--accent-secondary);
+		cursor: pointer;
+		transition: 0.1s;
+	}
+
+	.edit-mode .add-dial {
+		display: flex;
+	}
+
+	.add-dial:active {
+		background: #1a1a1a;
+		transform: scale(0.94);
+	}
+
+	/* Background Panel */
+	.bg-panel {
+		background: var(--card-bg);
+		border-radius: 20px;
+		padding: 14px;
+		margin: 10px 0 8px;
+		border: 1px solid var(--border-glow);
+		display: none;
+	}
+
+	.bg-panel.show {
+		display: block;
+	}
+
+	.bg-option-row {
+		display: flex;
+		gap: 8px;
+		margin-bottom: 10px;
+	}
+
+	.bg-option {
+		flex: 1;
+		padding: 10px;
+		background: #0a0a0a;
+		border-radius: 14px;
+		border: 1.5px solid #333;
+		color: var(--text-secondary);
+		font-size: 12px;
+		text-align: center;
+		cursor: pointer;
+		transition: 0.1s;
+		text-transform: uppercase;
+	}
+
+	.bg-option.active {
+		border-color: var(--accent-primary);
+		color: var(--accent-primary);
+		background: #1a1a1a;
+	}
+
+	.gradient-presets {
+		display: flex;
+		gap: 6px;
+		margin: 10px 0;
+		flex-wrap: wrap;
+	}
+
+	.gradient-preset {
+		width: 40px;
+		height: 40px;
+		border-radius: 12px;
+		border: 2px solid #333;
+		cursor: pointer;
+		transition: 0.1s;
+		background: linear-gradient(135deg, var(--g1), var(--g2), var(--g3));
+	}
+
+	.gradient-preset:active {
+		transform: scale(0.92);
+	}
+
+	.url-input-row {
+		display: flex;
+		gap: 8px;
+		margin-top: 8px;
+	}
+
+	.url-input {
+		flex: 1;
+		background: #0a0a0a;
+		border: 1.5px solid #333;
+		border-radius: 14px;
+		padding: 10px 14px;
+		color: white;
+		font-size: 13px;
+		outline: none;
+	}
+
+	.url-input:focus {
+		border-color: var(--accent-primary);
+	}
+
+	.opacity-slider {
+		width: 100%;
+		margin: 10px 0;
+		accent-color: var(--accent-primary);
+	}
+
+	.preset-images {
+		display: flex;
+		gap: 6px;
+		margin-top: 10px;
+		flex-wrap: wrap;
+	}
+
+	.preset-image {
+		width: 50px;
+		height: 50px;
+		border-radius: 12px;
+		border: 2px solid #333;
+		cursor: pointer;
+		background-size: cover;
+		background-position: center;
+		transition: 0.1s;
+	}
+
+	.preset-image:active {
+		transform: scale(0.92);
+		border-color: var(--accent-primary);
+	}
+
+	/* Color Panel */
+	.color-panel {
+		background: var(--card-bg);
+		border-radius: 20px;
+		padding: 14px;
+		margin: 10px 0 8px;
+		border: 1px solid var(--border-glow);
+		display: none;
+	}
+
+	.color-panel.show {
+		display: block;
+	}
+
+	.color-row {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		margin-bottom: 10px;
+	}
+
+	.color-label {
+		color: var(--text-secondary);
+		font-size: 12px;
+		min-width: 65px;
+	}
+
+	.color-input {
+		flex: 1;
+		height: 36px;
+		border-radius: 12px;
+		border: 1px solid var(--border-glow);
+		background: #000000;
+		padding: 4px;
+		cursor: pointer;
+	}
+
+	.preset-colors {
+		display: flex;
+		gap: 6px;
+		margin-top: 10px;
+		flex-wrap: wrap;
+	}
+
+	.preset {
+		width: 34px;
+		height: 34px;
+		border-radius: 34px;
+		border: 2px solid #333;
+		cursor: pointer;
+		transition: 0.1s;
+	}
+
+	.preset:active {
+		transform: scale(0.9);
+	}
+
+	/* Icon Color Section */
+	.icon-color-section {
+		margin-top: 16px;
+		padding-top: 16px;
+		border-top: 1px solid #333;
+	}
+
+	.section-label {
+		color: var(--text-secondary);
+		font-size: 12px;
+		margin-bottom: 10px;
+		display: block;
+	}
+
+	.icon-color-picker {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 8px;
+		margin: 12px 0;
+	}
+
+	.icon-color-dot {
+		width: 100%;
+		aspect-ratio: 1;
+		border-radius: 12px;
+		border: 2px solid #333;
+		cursor: pointer;
+		transition: 0.1s;
+	}
+
+	.icon-color-dot.active {
+		border-color: var(--accent-primary);
+		transform: scale(1.05);
+	}
+
+	.icon-color-dot:active {
+		transform: scale(0.95);
+	}
+
+	/* Icon picker for Font Awesome */
+	.icon-picker {
+		display: grid;
+		grid-template-columns: repeat(6, 1fr);
+		gap: 8px;
+		margin: 12px 0;
+		max-height: 200px;
+		overflow-y: auto;
+		padding: 4px;
+	}
+
+	.icon-option {
+		background: #0a0a0a;
+		border: 1.5px solid #333;
+		border-radius: 12px;
+		padding: 8px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--text-secondary);
+		font-size: 20px;
+		cursor: pointer;
+		transition: 0.1s;
+	}
+
+	.icon-option.selected {
+		border-color: var(--accent-primary);
+		color: var(--accent-primary);
+		background: #1a1a1a;
+	}
+
+	.icon-option:active {
+		transform: scale(0.92);
+	}
+
+	/* Custom icon input */
+	.custom-icon-input {
+		width: 100%;
+		background: #0a0a0a;
+		border: 1.5px solid #333;
+		border-radius: 14px;
+		padding: 12px 14px;
+		color: white;
+		font-size: 14px;
+		margin: 10px 0;
+		outline: none;
+	}
+
+	.custom-icon-input:focus {
+		border-color: var(--accent-primary);
+	}
+
+	.icon-preview {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 10px;
+		background: #0a0a0a;
+		border-radius: 14px;
+		margin: 10px 0;
+		font-size: 32px;
+		border: 1.5px solid #333;
+		min-height: 60px;
+	}
+
+	/* Made by Ron footer */
+	.ron-footer {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		margin-top: 8px;
+		padding: 12px 0 4px;
+	}
+
+	.made-by {
+		color: var(--text-secondary);
+		font-size: 12px;
+		letter-spacing: 1px;
+		opacity: 0.7;
+	}
+
+	.ron-name {
+		background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+		font-weight: 700;
+		font-size: 14px;
+		letter-spacing: 0.5px;
+	}
+
+	.code-icon {
+		font-size: 14px;
+		color: var(--accent-primary);
+	}
+
+	/* Quick Actions */
+	.quick-actions {
+		display: flex;
+		gap: 8px;
+		margin: 10px 0 6px;
+		justify-content: space-around;
+	}
+
+	.action-btn {
+		flex: 1;
+		background: var(--card-bg);
+		border-radius: 30px;
+		padding: 10px;
+		text-align: center;
+		color: var(--text-secondary);
+		font-size: 11px;
+		font-weight: 500;
+		border: 1px solid var(--border-glow);
+		cursor: pointer;
+		transition: 0.1s;
+		text-transform: uppercase;
+	}
+
+	.action-btn:active {
+		background: #1a1a1a;
+		transform: scale(0.96);
+		color: var(--accent-primary);
+	}
+
+	/* Footer */
+	.footer {
+		margin-top: auto;
+		padding-top: 10px;
+		display: flex;
+		justify-content: space-between;
+		color: var(--text-secondary);
+		font-size: 10px;
+		border-top: 1px solid #222;
+	}
+
+	/* Popup Modals */
+	.popup-modal {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: #000000e6;
+		z-index: 1000;
+		display: none;
+		align-items: center;
+		justify-content: center;
+		padding: 20px;
+	}
+
+	.popup-content {
+		background: var(--card-bg);
+		border-radius: 24px;
+		padding: 22px;
+		width: 100%;
+		max-width: 420px;
+		max-height: 80vh;
+		overflow-y: auto;
+		border: 1.5px solid var(--accent-primary);
+		box-shadow: 0 20px 40px #000000;
+	}
+
+	.popup-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 16px;
+		color: var(--text-primary);
+	}
+
+	.popup-title {
+		font-size: 18px;
+		font-weight: 600;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.popup-close {
+		cursor: pointer;
+		font-size: 24px;
+		color: var(--text-secondary);
+	}
+
+	.popup-list {
+		list-style: none;
+		max-height: 300px;
+		overflow-y: auto;
+	}
+
+	.popup-list li {
+		padding: 10px 8px;
+		border-bottom: 1px solid #333;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	.popup-list li a {
+		color: var(--accent-primary);
+		text-decoration: none;
+		font-size: 14px;
+		word-break: break-all;
+	}
+
+	.popup-list li span {
+		color: var(--text-secondary);
+		font-size: 13px;
+	}
+
+	.ip-display {
+		background: #0a0a0a;
+		padding: 16px;
+		border-radius: 16px;
+		text-align: center;
+		margin-top: 10px;
+	}
+
+	.ip-address {
+		font-size: 28px;
+		font-weight: bold;
+		color: var(--accent-primary);
+		letter-spacing: 2px;
+	}
+
+	.ip-label {
+		color: var(--text-secondary);
+		margin-bottom: 8px;
+	}
+
+	.refresh-ip {
+		margin-top: 12px;
+		background: var(--accent-secondary);
+		border: none;
+		color: white;
+		padding: 8px 16px;
+		border-radius: 30px;
+		cursor: pointer;
+	}
+
+	/* Modal */
+	.modal {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: #000000e6;
+		z-index: 1000;
+		display: none;
+		align-items: center;
+		justify-content: center;
+		padding: 20px;
+	}
+
+	.modal-content {
+		background: var(--card-bg);
+		border-radius: 24px;
+		padding: 22px;
+		width: 100%;
+		max-width: 360px;
+		max-height: 90vh;
+		overflow-y: auto;
+		border: 1.5px solid var(--accent-primary);
+		box-shadow: 0 20px 40px #000000;
+	}
+
+	.modal-title {
+		color: var(--text-primary);
+		font-size: 18px;
+		font-weight: 600;
+		margin-bottom: 18px;
+	}
+
+	.modal-input {
+		width: 100%;
+		background: #000000;
+		border: 1.5px solid #333;
+		border-radius: 14px;
+		padding: 12px 14px;
+		color: white;
+		font-size: 14px;
+		margin-bottom: 12px;
+		outline: none;
+	}
+
+	.modal-input:focus {
+		border-color: var(--accent-primary);
+	}
+
+	.modal-actions {
+		display: flex;
+		gap: 8px;
+		justify-content: flex-end;
+		margin-top: 6px;
+	}
+
+	.modal-btn {
+		padding: 10px 20px;
+		border-radius: 30px;
+		border: none;
+		font-weight: 600;
+		font-size: 13px;
+		cursor: pointer;
+		transition: 0.1s;
+		text-transform: uppercase;
+	}
+
+	.modal-btn.primary {
+		background: var(--accent-primary);
+		color: #000000;
+	}
+
+	.modal-btn.secondary {
+		background: #1a1a1a;
+		color: var(--text-secondary);
+		border: 1px solid #333;
+	}
+
+	.modal-btn:active {
+		transform: scale(0.95);
+	}
+
+	.reset-btn {
+		background: #1a1a1a;
+		border: 1px solid #ff4444;
+		color: #ff8888;
+		width: 100%;
+		margin-top: 10px;
+		padding: 10px;
+		border-radius: 30px;
+		font-size: 12px;
+		cursor: pointer;
+		text-transform: uppercase;
+	}
+
+	.icon-type-toggle {
+		display: flex;
+		gap: 8px;
+		margin-bottom: 12px;
+	}
+
+	.icon-type-btn {
+		flex: 1;
+		padding: 8px;
+		background: #0a0a0a;
+		border: 1.5px solid #333;
+		border-radius: 14px;
+		color: var(--text-secondary);
+		font-size: 12px;
+		cursor: pointer;
+		transition: 0.1s;
+	}
+
+	.icon-type-btn.active {
+		border-color: var(--accent-primary);
+		color: var(--accent-primary);
+		background: #1a1a1a;
+	}
+
+	.icon-source-toggle {
+		display: flex;
+		gap: 8px;
+		margin: 10px 0;
+	}
+
+	.icon-source-btn {
+		flex: 1;
+		padding: 8px;
+		background: #0a0a0a;
+		border: 1.5px solid #333;
+		border-radius: 14px;
+		color: var(--text-secondary);
+		font-size: 11px;
+		cursor: pointer;
+		transition: 0.1s;
+	}
+
+	.icon-source-btn.active {
+		border-color: var(--accent-primary);
+		color: var(--accent-primary);
+		background: #1a1a1a;
+	}
+
+	/* Modal icon color picker */
+	.modal-icon-color-picker {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 8px;
+		margin: 10px 0;
+	}
+
+	.modal-icon-color-dot {
+		width: 100%;
+		aspect-ratio: 1;
+		border-radius: 10px;
+		border: 2px solid #333;
+		cursor: pointer;
+		transition: 0.1s;
+	}
+
+	.modal-icon-color-dot.active {
+		border-color: var(--accent-primary);
+		transform: scale(1.05);
+	}
+	</style>
+</head>
+
+<body>
+	<!-- Background Layers -->
+	<div class="bg-layer">
+		<div class="bg-gradient" id="bgGradient"></div>
+		<div class="bg-image" id="bgImage"></div>
+		<div class="bg-mesh"></div>
+	</div>
+	<div class="android-home">
+		<div class="content">
+			<!-- Header -->
+			<div class="header">
+				<div class="greeting" id="greetingText">WELCOME</div>
+				<div class="header-actions">
+					<div class="icon-btn" id="bgToggle">🌄</div>
+					<div class="icon-btn" id="colorToggle">🎨</div>
+					<div class="icon-btn" id="editToggle"><i class="fas fa-pen"></i></div>
+				</div>
+			</div>
+			<!-- Love Coding Badge -->
+			<div class="love-badge">
+				<span class="heart">❤️</span>
+				<span>LOVE CODING</span>
+				<span class="heart">❤️</span>
+			</div>
+			<!-- Clock -->
+			<div class="clock-widget">
+				<div id="timeDisplay">--:--</div>
+				<div id="dateDisplay">----</div>
+			</div>
+			<!-- Search -->
+			<div class="search-section">
+				<div class="search-box">
+					<span class="search-icon">🔍</span>
+					<input type="text" id="searchInput" placeholder="Search or type URL..." autocomplete="off" enterkeyhint="go">
+					<button class="search-btn" id="searchBtn">GO</button>
+				</div>
+			</div>
+			<!-- Background Panel -->
+			<div class="bg-panel" id="bgPanel">
+				<div class="bg-option-row">
+					<div class="bg-option active" data-bg-type="gradient">🌈 Gradient</div>
+					<div class="bg-option" data-bg-type="image">🖼️ Image</div>
+				</div>
+				<div id="gradientOptions">
+					<div class="gradient-presets">
+						<div class="gradient-preset" style="--g1: #0a0e27; --g2: #1a0b2e; --g3: #0d1117;" data-g1="#0a0e27" data-g2="#1a0b2e" data-g3="#0d1117"></div>
+						<div class="gradient-preset" style="--g1: #1a1a2e; --g2: #16213e; --g3: #0f3460;" data-g1="#1a1a2e" data-g2="#16213e" data-g3="#0f3460"></div>
+						<div class="gradient-preset" style="--g1: #2d1b69; --g2: #1b143f; --g3: #0b0822;" data-g1="#2d1b69" data-g2="#1b143f" data-g3="#0b0822"></div>
+						<div class="gradient-preset" style="--g1: #1e1b4b; --g2: #312e81; --g3: #4338ca;" data-g1="#1e1b4b" data-g2="#312e81" data-g3="#4338ca"></div>
+						<div class="gradient-preset" style="--g1: #0c0a1e; --g2: #1a103c; --g3: #2d1b4e;" data-g1="#0c0a1e" data-g2="#1a103c" data-g3="#2d1b4e"></div>
+					</div>
+				</div>
+				<div id="imageOptions" style="display:none;">
+					<div class="url-input-row">
+						<input type="text" class="url-input" id="imageUrlInput" placeholder="Enter image URL..." value="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800">
+						<button class="modal-btn primary" id="applyImageBtn" style="padding: 10px 14px;">Apply</button>
+					</div>
+					<div style="margin-top: 10px;">
+						<label style="color: var(--text-secondary); font-size: 11px;">Opacity</label>
+						<input type="range" class="opacity-slider" id="opacitySlider" min="0.1" max="0.8" step="0.05" value="0.3">
+					</div>
+					<div class="preset-images">
+						<div class="preset-image" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200');" data-image="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800"></div>
+						<div class="preset-image" style="background-image: url('https://images.unsplash.com/photo-1534796636912-3b95b3b0acc9?w=200');" data-image="https://images.unsplash.com/photo-1534796636912-3b95b3b0acc9?w=800"></div>
+						<div class="preset-image" style="background-image: url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=200');" data-image="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800"></div>
+						<div class="preset-image" style="background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=200');" data-image="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800"></div>
+						<div class="preset-image" style="background-image: url('https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=200');" data-image="https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=800"></div>
+						<div class="preset-image" style="background-image: url('https://images.unsplash.com/photo-1731839329447-ab62f6e1d93a?w=200');" data-image="https://images.unsplash.com/photo-1731839329447-ab62f6e1d93a?w=800"></div>
+						<div class="preset-image" style="background-image: url('https://images.unsplash.com/photo-1519575706483-221027bfbb31?w=200');" data-image="https://images.unsplash.com/photo-1519575706483-221027bfbb31?w=800"></div>
+					</div>
+				</div>
+			</div>
+			<!-- Color Panel -->
+			<div class="color-panel" id="colorPanel">
+				<div class="color-row">
+					<span class="color-label">Primary</span>
+					<input type="color" id="primaryColor" class="color-input" value="#00d4ff">
+				</div>
+				<div class="color-row">
+					<span class="color-label">Secondary</span>
+					<input type="color" id="secondaryColor" class="color-input" value="#7b2ff7">
+				</div>
+				<div class="color-row">
+					<span class="color-label">Tertiary</span>
+					<input type="color" id="tertiaryColor" class="color-input" value="#ff006e">
+				</div>
+				<!-- Icon Colors Section -->
+				<div class="icon-color-section">
+					<span class="section-label">🎨 Icon Colors (Click to select, use picker to change)</span>
+					<div class="icon-color-picker">
+						<div class="icon-color-dot active" data-icon-color="1" style="background: #00d4ff;"></div>
+						<div class="icon-color-dot" data-icon-color="2" style="background: #7b2ff7;"></div>
+						<div class="icon-color-dot" data-icon-color="3" style="background: #ff006e;"></div>
+						<div class="icon-color-dot" data-icon-color="4" style="background: #51cf66;"></div>
+						<div class="icon-color-dot" data-icon-color="5" style="background: #ffd43b;"></div>
+						<div class="icon-color-dot" data-icon-color="6" style="background: #ff6b6b;"></div>
+						<div class="icon-color-dot" data-icon-color="7" style="background: #cc5de8;"></div>
+						<div class="icon-color-dot" data-icon-color="8" style="background: #4dabf7;"></div>
+					</div>
+					<input type="color" id="iconColorPicker" class="color-input" value="#00d4ff" style="margin-top: 8px;">
+				</div>
+				<div class="preset-colors">
+					<div class="preset" style="background: #00d4ff;" data-primary="#00d4ff" data-secondary="#7b2ff7" data-tertiary="#ff006e"></div>
+					<div class="preset" style="background: #ff6b6b;" data-primary="#ff6b6b" data-secondary="#c92a2a" data-tertiary="#ff8787"></div>
+					<div class="preset" style="background: #51cf66;" data-primary="#51cf66" data-secondary="#2b8a3e" data-tertiary="#69db7c"></div>
+					<div class="preset" style="background: #ffd43b;" data-primary="#ffd43b" data-secondary="#e67700" data-tertiary="#ffc078"></div>
+					<div class="preset" style="background: #cc5de8;" data-primary="#cc5de8" data-secondary="#5f3dc4" data-tertiary="#d0bfff"></div>
+				</div>
+				<button class="reset-btn" id="resetColorsBtn">Reset Colors</button>
+			</div>
+			<!-- Dials -->
+			<div class="dials-title">
+				<span>Quick Access</span>
+				<span class="edit-indicator" id="editIndicator"></span>
+			</div>
+			<div class="dials-grid" id="dialsGrid"></div>
+			<div class="add-dial" id="addDialBtn">
+				<span style="font-size: 22px;">+</span>
+				<span style="font-size: 10px; margin-top: 3px;">ADD</span>
+			</div>
+			<!-- Quick Actions: open popups -->
+			<div class="quick-actions">
+				<div class="action-btn" data-action="history">📜<br>History</div>
+				<div class="action-btn" data-action="bookmarks">⭐<br>Bookmarks</div>
+				<div class="action-btn" data-action="downloads">⬇️<br>Downloads</div>
+				<div class="action-btn" data-action="ip">🌐<br>My IP</div>
+			</div>
+			<!-- Made by Ron -->
+			<div class="ron-footer">
+				<span class="code-icon"><i class="fas fa-code"></i></span>
+				<span class="made-by">Made by</span>
+				<span class="ron-name">RON</span>
+				<span class="code-icon"><i class="fas fa-bolt"></i></span>
+			</div>
+			<!-- Footer -->
+			<div class="footer">
+				<span>VOID OS</span>
+				<span id="statsText"><i class="fas fa-heart"></i> LOVE CODING</span>
+				<span>v1.0</span>
+			</div>
+		</div>
+	</div>
+	<!-- Edit Modal -->
+	<div class="modal" id="editModal">
+		<div class="modal-content">
+			<div class="modal-title" id="modalTitle">Add Shortcut</div>
+			<input type="text" class="modal-input" id="modalName" placeholder="Name" autocomplete="off">
+			<input type="text" class="modal-input" id="modalUrl" placeholder="URL" autocomplete="off">
+			<!-- Icon Type Toggle -->
+			<div class="icon-type-toggle">
+				<div class="icon-type-btn active" data-icon-type="fa">Font Awesome</div>
+				<div class="icon-type-btn" data-icon-type="emoji">Emoji</div>
+			</div>
+			<!-- Icon Source Toggle (for Font Awesome) -->
+			<div id="faSourceToggle" class="icon-source-toggle">
+				<div class="icon-source-btn active" data-source="picker">Icon Picker</div>
+				<div class="icon-source-btn" data-source="custom">Custom Class</div>
+			</div>
+			<!-- Font Awesome Icon Picker -->
+			<div id="faIconPicker" class="icon-picker"></div>
+			<!-- Custom Icon Class Input -->
+			<input type="text" class="custom-icon-input" id="customIconInput" placeholder="e.g., fas fa-rocket" autocomplete="off" style="display:none;">
+			<!-- Icon Preview -->
+			<div class="icon-preview" id="iconPreview">
+				<i class="fab fa-github"></i>
+			</div>
+			<!-- Emoji Input -->
+			<input type="text" class="modal-input" id="modalIcon" placeholder="Enter emoji" maxlength="2" autocomplete="off" style="display:none;">
+			<!-- Icon Color Selection (for Font Awesome) -->
+			<div id="iconColorSelect" style="margin: 10px 0;">
+				<label style="color: var(--text-secondary); font-size: 12px;">Icon Color:</label>
+				<div class="modal-icon-color-picker">
+					<div class="modal-icon-color-dot active" data-fa-color="1" style="background: #00d4ff;"></div>
+					<div class="modal-icon-color-dot" data-fa-color="2" style="background: #7b2ff7;"></div>
+					<div class="modal-icon-color-dot" data-fa-color="3" style="background: #ff006e;"></div>
+					<div class="modal-icon-color-dot" data-fa-color="4" style="background: #51cf66;"></div>
+					<div class="modal-icon-color-dot" data-fa-color="5" style="background: #ffd43b;"></div>
+					<div class="modal-icon-color-dot" data-fa-color="6" style="background: #ff6b6b;"></div>
+					<div class="modal-icon-color-dot" data-fa-color="7" style="background: #cc5de8;"></div>
+					<div class="modal-icon-color-dot" data-fa-color="8" style="background: #4dabf7;"></div>
+				</div>
+			</div>
+			<div class="modal-actions">
+				<button class="modal-btn secondary" id="modalCancel">Cancel</button>
+				<button class="modal-btn primary" id="modalSave">Save</button>
+			</div>
+		</div>
+	</div>
+	<!-- POPUP: History -->
+	<div class="popup-modal" id="historyPopup">
+		<div class="popup-content">
+			<div class="popup-header">
+				<div class="popup-title"><i class="fas fa-history"></i> History</div>
+				<div class="popup-close" data-close="historyPopup">&times;</div>
+			</div>
+			<ul class="popup-list" id="historyList">
+				<li>Loading...</li>
+			</ul>
+		</div>
+	</div>
+	<!-- POPUP: Bookmarks -->
+	<div class="popup-modal" id="bookmarksPopup">
+		<div class="popup-content">
+			<div class="popup-header">
+				<div class="popup-title"><i class="fas fa-star"></i> Bookmarks</div>
+				<div class="popup-close" data-close="bookmarksPopup">&times;</div>
+			</div>
+			<ul class="popup-list" id="bookmarksList">
+				<li>Loading...</li>
+			</ul>
+		</div>
+	</div>
+	<!-- POPUP: Downloads -->
+	<div class="popup-modal" id="downloadsPopup">
+		<div class="popup-content">
+			<div class="popup-header">
+				<div class="popup-title"><i class="fas fa-download"></i> Downloads</div>
+				<div class="popup-close" data-close="downloadsPopup">&times;</div>
+			</div>
+			<ul class="popup-list" id="downloadsList">
+				<li>Loading...</li>
+			</ul>
+		</div>
+	</div>
+	<!-- POPUP: IP -->
+	<div class="popup-modal" id="ipPopup">
+		<div class="popup-content">
+			<div class="popup-header">
+				<div class="popup-title"><i class="fas fa-network-wired"></i> Your IP</div>
+				<div class="popup-close" data-close="ipPopup">&times;</div>
+			</div>
+			<div class="ip-display">
+				<div class="ip-label">Current IP Address</div>
+				<div class="ip-address" id="ipAddress">Fetching...</div><button class="refresh-ip" id="refreshIpBtn"><i class="fas fa-sync-alt"></i> Refresh</button>
+			</div>
+		</div>
+	</div>
+	<!-- Edit Modal (unchanged) -->
+	<div class="modal" id="editModal">
+		<div class="modal-content">
+			<div class="modal-title" id="modalTitle">Add Shortcut</div><input type="text" class="modal-input" id="modalName" placeholder="Name"><input type="text" class="modal-input" id="modalUrl" placeholder="URL">
+			<div class="icon-type-toggle">
+				<div class="icon-type-btn active" data-icon-type="fa">Font Awesome</div>
+				<div class="icon-type-btn" data-icon-type="emoji">Emoji</div>
+			</div>
+			<div id="faSourceToggle" class="icon-source-toggle">
+				<div class="icon-source-btn active" data-source="picker">Icon Picker</div>
+				<div class="icon-source-btn" data-source="custom">Custom Class</div>
+			</div>
+			<div id="faIconPicker" class="icon-picker"></div><input type="text" class="custom-icon-input" id="customIconInput" placeholder="e.g., fas fa-rocket" style="display:none;">
+			<div class="icon-preview" id="iconPreview"><i class="fab fa-github"></i></div><input type="text" class="modal-input" id="modalIcon" placeholder="Enter emoji" maxlength="2" style="display:none;">
+			<div id="iconColorSelect"><label style="color:var(--text-secondary);font-size:12px;">Icon Color:</label>
+				<div class="modal-icon-color-picker">
+					<div class="modal-icon-color-dot active" data-fa-color="1" style="background:#00d4ff;"></div>
+					<div class="modal-icon-color-dot" data-fa-color="2" style="background:#7b2ff7;"></div>
+					<div class="modal-icon-color-dot" data-fa-color="3" style="background:#ff006e;"></div>
+					<div class="modal-icon-color-dot" data-fa-color="4" style="background:#51cf66;"></div>
+				</div>
+			</div>
+			<div class="modal-actions"><button class="modal-btn secondary" id="modalCancel">Cancel</button><button class="modal-btn primary" id="modalSave">Save</button></div>
+		</div>
+	</div>
+</body>
+<script src="script.js"></script>
+</html>
